@@ -1,5 +1,7 @@
 ## kaiascan_sdk_ts
-The Kaiascan SDK is a TypeScript library that provides a convenient interface for interacting with the Kaiascan API. It allows you to fetch various blockchain data, such as token information, NFT details, contract creation code, and more.
+The Kaiascan SDK is a TypeScript library that provides a convenient interface for interacting with the Kaiascan API.
+ It allows you to fetch various blockchain data, such as token information, NFT details, contract creation code, and more.
+
 Features
 
 Fetch fungible token information by contract address
@@ -12,13 +14,16 @@ Fetch a specific transaction by transaction hash
 Retrieve contract source code by contract address
 
 Usage
+
 First, import the KaiascanSDK class and create a new instance:
+
 import { KaiascanSDK } from 'kaiascan-sdk';
 
 const sdk = new KaiascanSDK();
+
 Fetch Fungible Token Information
 To fetch information about a fungible token, use the getFungibleToken method:
-typescriptCopyconst tokenAddress = '0x...';
+const tokenAddress = '0x...';
 sdk.getFungibleToken(tokenAddress)
     .then((response) => {
         console.log(response.data);
@@ -41,6 +46,7 @@ totalBurns: The total number of token burns
 
 Fetch NFT Item Details
 To fetch details about an NFT item, use the getNftItem method:
+
 const nftAddress = '0x...';
 const tokenId = '1234';
 sdk.getNftItem(nftAddress, tokenId)
@@ -66,6 +72,7 @@ getContractSourceCode(contractAddress: Address): Retrieves the contract source c
 You can refer to the API reference in the "API Reference" section for more details on how to use these methods.
 Error Handling
 The Kaiascan SDK throws errors for both HTTP and API-specific errors. You can handle these errors using the standard catch block:
+
 sdk.getFungibleToken(tokenAddress)
     .then((response) => {
         console.log(response.data);
@@ -73,7 +80,11 @@ sdk.getFungibleToken(tokenAddress)
     .catch((error) => {
         console.error(error);
     });
-If an HTTP error occurs (e.g., the API returns a non-200 status code), the SDK will throw an Error with the message "HTTP error! status: [status_code]". If an API error occurs (e.g., the API returns a non-zero error code), the SDK will throw an Error with the message "API error! code: [code], message: [message]".
+If an HTTP error occurs (e.g., the API returns a non-200 status code),
+ the SDK will throw an Error with the message "HTTP error! status: [status_code]".
+ If an API error occurs (e.g., the API returns a non-zero error code),
+ the SDK will throw an Error with the message "API error! code: [code], message: [message]".
+
 API Reference
 The Kaiascan SDK provides the following methods:
 
