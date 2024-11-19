@@ -51,7 +51,7 @@ class KaiascanSDK {
         try {
             const response = await axios.get<ApiResponse<T>>(urlStr, {
                 headers: {
-                    'Authorization': `Bearer ${process.env.API_KEY}`, // Use environment variable for API key
+                    'Authorization': `Bearer ${process.env.API_KEY}`,
                     'Content-Type': 'application/json',
                 },
             });
