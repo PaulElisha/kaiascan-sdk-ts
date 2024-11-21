@@ -1,37 +1,9 @@
 import axios from 'axios';
-
-const BASE_URL_MAINNET = "https://mainnet-oapi.kaiascan.io/";
-const BASE_URL_TESTNET = "https://kairos-oapi.kaiascan.io/";
-const CHAIN_ID_MAINNET = "8217";
-const CHAIN_ID_TESTNET = "1001";
-
-const tokensEndpoint = "api/v1/tokens";
-const nftsEndpoint = "api/v1/nfts";
-const blocksEndpoint = "api/v1/blocks";
-const transactionEndpoint = "api/v1/transactions";
-const contractEndpoint = "api/v1/contracts";
-const transactionReceiptsEndpoint = "api/v1/transaction-receipts";
-
-type Address = string;
-
-interface ApiResponse<T> {
-    code: number;
-    data: T;
-    msg: string;
-}
-
-interface TokenInfo {
-    contractType: string;
-    name: string;
-    symbol: string;
-    icon: string;
-    decimal: number;
-    totalSupply: number;
-    totalTransfers: number;
-    officialSite: string;
-    burnAmount: number;
-    totalBurns: number;
-}
+import ChainInfo from './objects/chainInfo';
+import Endpoints from './objects/endpoint';
+import Address from './type/address';
+import ApiResponse from './interfaces/ApiResponse';
+import TokenInfo from './interfaces/TokenInfo';
 
 class KaiascanSDK {
     public BASE_URL: string;
@@ -39,11 +11,11 @@ class KaiascanSDK {
 
     constructor(isTestnet: boolean) {
         if (isTestnet) {
-            this.BASE_URL = BASE_URL_TESTNET;
-            this.CHAIN_ID = CHAIN_ID_TESTNET;
+            this.BASE_URL = ChainInfo["BASE URL TESTNET"];
+            this.CHAIN_ID = ChainInfo["CHAIN ID TESTNET"];
         } else {
-            this.BASE_URL = BASE_URL_MAINNET;
-            this.CHAIN_ID = CHAIN_ID_MAINNET;
+            this.BASE_URL = ChainInfo["BASE URL MAINNET"];
+            this.CHAIN_ID = ChainInfo["CHAIN ID MAINNET"];
         }
     }
 
@@ -68,50 +40,203 @@ class KaiascanSDK {
         }
     }
 
+    public async getAccountKeyHistories(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${encodeURIComponent(accountAddress)}/key-histories?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getKaiaInfo(): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}api/v1/kaia`;
+        return this.fetchApi<any>(urlStr);
+    }
+
     public async getFungibleToken(tokenAddress: Address): Promise<ApiResponse<TokenInfo>> {
-        const urlStr = `${this.BASE_URL}${tokensEndpoint}?tokenAddress=${encodeURIComponent(tokenAddress)}`;
+        const urlStr = `${this.BASE_URL}${Endpoints.tokensEndpoint}?tokenAddress=${encodeURIComponent(tokenAddress)}`;
         return this.fetchApi<TokenInfo>(urlStr);
     }
 
     public async getNftItem(nftAddress: Address, tokenId: string): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${nftsEndpoint}?nftAddress=${encodeURIComponent(nftAddress)}&tokenId=${encodeURIComponent(tokenId)}`;
+        const urlStr = `${this.BASE_URL}${Endpoints.nftsEndpoint}?nftAddress=${encodeURIComponent(nftAddress)}&tokenId=${encodeURIComponent(tokenId)}`;
         return this.fetchApi<any>(urlStr);
     }
 
     public async getContractCreationCode(contractAddress: Address): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${contractEndpoint}/creation-code?contractAddress=${encodeURIComponent(contractAddress)}`;
-        return this.fetchApi<any>(urlStr);
-    }
-
-    public async getLatestBlock(): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${blocksEndpoint}/latest`;
-        return this.fetchApi<any>(urlStr);
-    }
-
-    public async getBlock(blockNumber: number): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${blocksEndpoint}?blockNumber=${blockNumber}`;
-        return this.fetchApi<any>(urlStr);
-    }
-
-    public async getTransactionsOfBlock(blockNumber: number): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${blocksEndpoint}/${blockNumber}/transactions`;
-        return this.fetchApi<any>(urlStr);
-    }
-
-    public async getTransaction(transactionHash: string): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${transactionEndpoint}/${encodeURIComponent(transactionHash)}`;
-        return this.fetchApi<any>(urlStr);
-    }
-
-    public async getTransactionReceiptStatus(transactionHash: string): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${transactionReceiptsEndpoint}/status?transactionHash=${encodeURIComponent(transactionHash)}`;
+        const urlStr = `${this.BASE_URL}${Endpoints.contractEndpoint}/creation-code?contractAddress=${encodeURIComponent(contractAddress)}`;
         return this.fetchApi<any>(urlStr);
     }
 
     public async getContractSourceCode(contractAddress: Address): Promise<ApiResponse<any>> {
-        const urlStr = `${this.BASE_URL}${contractEndpoint}/source-code?contractAddress=${encodeURIComponent(contractAddress)}`;
+        const urlStr = `${this.BASE_URL}${Endpoints.contractEndpoint}/source-code?contractAddress=${encodeURIComponent(contractAddress)}`;
         return this.fetchApi<any>(urlStr);
     }
+
+    public async getLatestBlock(): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}${Endpoints.blocksEndpoint}/latest`;
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getLatestBlockBurns(
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (page < 1) {
+            throw new Error("Page must be greater than or equal to 1.");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000.");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/blocks/latest/burns?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getLatestBlockRewards(
+        blockNumber: number
+    ): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}api/v1/blocks/latest/rewards?blockNumber=${blockNumber}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getBlock(blockNumber: number): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}${Endpoints.blocksEndpoint}?blockNumber=${blockNumber}`;
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getBlocks(
+        blockNumber: number,
+        blockNumberStart?: number,
+        blockNumberEnd?: number,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        const queryParams: string[] = [];
+
+        if (blockNumberStart !== undefined) {
+            queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        }
+
+        if (blockNumberEnd !== undefined) {
+            queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+        }
+
+        if (page >= 1) {
+            queryParams.push(`page=${page}`);
+        }
+
+        if (size >= 1 && size <= 2000) {
+            queryParams.push(`size=${size}`);
+        }
+
+        const urlStr = `${this.BASE_URL}${Endpoints.blocksEndpoint}?blockNumber=${blockNumber}${queryParams.length > 0 ? '&' + queryParams.join('&') : ''}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionsOfBlock(
+        blockNumber: number,
+        type?: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        const queryParams: string[] = [];
+
+        if (type) {
+            queryParams.push(`type=${encodeURIComponent(type)}`);
+        }
+
+        if (page >= 1) {
+            queryParams.push(`page=${page}`);
+        }
+
+        if (size >= 1 && size <= 2000) {
+            queryParams.push(`size=${size}`);
+        }
+
+        const urlStr = `${this.BASE_URL}${Endpoints.blocksEndpoint}/${blockNumber}/transactions${queryParams.length > 0 ? '?' + queryParams.join('&') : ''}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getBlockBurns(
+        blockNumber: number
+    ): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}api/v1/blocks/${blockNumber}/burns`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getBlockRewards(
+        blockNumber: number
+    ): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}api/v1/blocks/${blockNumber}/rewards`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getInternalTransactionsOfBlock(
+        blockNumber: number,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/blocks/${blockNumber}/internal-transactions?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransaction(transactionHash: string): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}${Endpoints.transactionEndpoint}/${encodeURIComponent(transactionHash)}`;
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionReceiptStatus(transactionHash: string): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}${Endpoints.transactionReceiptsEndpoint}/status?transactionHash=${encodeURIComponent(transactionHash)}`;
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionStatus(
+        transactionHash: string
+    ): Promise<ApiResponse<any>> {
+        const urlStr = `${this.BASE_URL}api/v1/transactions/${encodeURIComponent(transactionHash)}/status`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+
 }
 
 export default KaiascanSDK;
