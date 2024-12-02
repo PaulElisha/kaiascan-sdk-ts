@@ -62,6 +62,268 @@ class KaiascanSDK {
         return this.fetchApi<any>(urlStr);
     }
 
+    public async getAccountInfo(
+        accountAddress: string
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountTokenTransfers(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20,
+        contractAddress?: string,
+        blockNumberStart?: number,
+        blockNumberEnd?: number
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (contractAddress) queryParams.push(`contractAddress=${contractAddress}`);
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/token-transfers?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountEventLogs(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20,
+        signature?: string,
+        blockNumberStart?: number,
+        blockNumberEnd?: number
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (signature) queryParams.push(`signature=${signature}`);
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/event-logs?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountKIP17NftBalances(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/nft-balances/kip17?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountKIP37NftBalances(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/nft-balances/kip37?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountNftTransfers(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20,
+        contractAddress?: string,
+        blockNumberStart?: number,
+        blockNumberEnd?: number
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (contractAddress) queryParams.push(`contractAddress=${contractAddress}`);
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/nft-transfers?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountTokenBalances(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/token-balances?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountTokenDetails(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/token-details?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getAccountTransactions(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20,
+        blockNumberStart?: number,
+        blockNumberEnd?: number,
+        type?: string,
+        directions?: string[]
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+        if (type) queryParams.push(`type=${type}`);
+        if (directions) queryParams.push(`directions=${directions.join(',')}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/transactions?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getFeePaidTransactions(
+        accountAddress: string,
+        page: number = 1,
+        size: number = 20,
+        blockNumberStart?: number,
+        blockNumberEnd?: number,
+        type?: string
+    ): Promise<ApiResponse<any>> {
+        if (!accountAddress) {
+            throw new Error("Account address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+        if (type) queryParams.push(`type=${type}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/accounts/${accountAddress}/fee-paid-transactions?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
     public async getKaiaInfo(): Promise<ApiResponse<any>> {
         const urlStr = `${this.BASE_URL}api/v1/kaia`;
         return this.fetchApi<any>(urlStr);
@@ -72,10 +334,186 @@ class KaiascanSDK {
         return this.fetchApi<TokenInfo>(urlStr);
     }
 
+    public async getTokenHolders(
+        tokenAddress: string,
+        page: number = 1,
+        size: number = 20,
+        holderAddress?: string
+    ): Promise<ApiResponse<any>> {
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (holderAddress) {
+            queryParams.push(`holderAddress=${holderAddress}`);
+        }
+
+        const urlStr = `${this.BASE_URL}api/v1/tokens/${tokenAddress}/holders?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTokenBurns(
+        tokenAddress: string,
+        page: number = 1,
+        size: number = 20,
+        blockNumberStart?: number,
+        blockNumberEnd?: number
+    ): Promise<ApiResponse<any>> {
+        if (!tokenAddress) {
+            throw new Error("Token address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/tokens/${tokenAddress}/burns?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTokenTransfers(
+        tokenAddress: string,
+        page: number = 1,
+        size: number = 20,
+        blockNumberStart?: number,
+        blockNumberEnd?: number
+    ): Promise<ApiResponse<any>> {
+        if (!tokenAddress) {
+            throw new Error("Token address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/tokens/${tokenAddress}/transfers?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
     public async getNftItem(nftAddress: Address, tokenId: string): Promise<ApiResponse<any>> {
         const urlStr = `${this.BASE_URL}${Endpoints.nftsEndpoint}?nftAddress=${encodeURIComponent(nftAddress)}&tokenId=${encodeURIComponent(tokenId)}`;
         return this.fetchApi<any>(urlStr);
     }
+
+    public async getNft(
+        tokenAddress: string
+    ): Promise<ApiResponse<any>> {
+        if (!tokenAddress) {
+            throw new Error("Token address is required");
+        }
+
+        const urlStr = `${this.BASE_URL}api/v1/nfts/${tokenAddress}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getNftTransfers(
+        tokenAddress: string,
+        page: number = 1,
+        size: number = 20,
+        tokenId?: string,
+        blockNumberStart?: number,
+        blockNumberEnd?: number
+    ): Promise<ApiResponse<any>> {
+        if (!tokenAddress) {
+            throw new Error("Token address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (tokenId) queryParams.push(`tokenId=${tokenId}`);
+        if (blockNumberStart) queryParams.push(`blockNumberStart=${blockNumberStart}`);
+        if (blockNumberEnd) queryParams.push(`blockNumberEnd=${blockNumberEnd}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/nfts/${tokenAddress}/transfers?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getNftHolders(
+        tokenAddress: string,
+        page: number = 1,
+        size: number = 20,
+        tokenId?: string
+    ): Promise<ApiResponse<any>> {
+        if (!tokenAddress) {
+            throw new Error("Token address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (tokenId) queryParams.push(`tokenId=${tokenId}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/nfts/${tokenAddress}/holders?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getNftInventories(
+        tokenAddress: string,
+        page: number = 1,
+        size: number = 20,
+        keyword?: string
+    ): Promise<ApiResponse<any>> {
+        if (!tokenAddress) {
+            throw new Error("Token address is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (keyword) queryParams.push(`keyword=${keyword}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/nfts/${tokenAddress}/inventories?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
 
     public async getContractCreationCode(contractAddress: Address): Promise<ApiResponse<any>> {
         const urlStr = `${this.BASE_URL}${Endpoints.contractEndpoint}/creation-code?contractAddress=${encodeURIComponent(contractAddress)}`;
@@ -84,6 +522,43 @@ class KaiascanSDK {
 
     public async getContractSourceCode(contractAddress: Address): Promise<ApiResponse<any>> {
         const urlStr = `${this.BASE_URL}${Endpoints.contractEndpoint}/source-code?contractAddress=${encodeURIComponent(contractAddress)}`;
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getContractInfo(
+        contractAddress: string
+    ): Promise<ApiResponse<any>> {
+        if (!contractAddress) {
+            throw new Error("Contract address is required");
+        }
+
+        const urlStr = `${this.BASE_URL}api/v1/contracts/${contractAddress}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getContractsInfo(
+        contractAddresses: string[]
+    ): Promise<ApiResponse<any>> {
+        if (!contractAddresses || contractAddresses.length === 0) {
+            throw new Error("Contract address list is required");
+        }
+
+        const queryParams = `contractAddresses=${contractAddresses.join(',')}`;
+        const urlStr = `${this.BASE_URL}api/v1/contracts?${queryParams}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getContractAbi(
+        contractAddress: string
+    ): Promise<ApiResponse<any>> {
+        if (!contractAddress) {
+            throw new Error("Contract address is required");
+        }
+
+        const urlStr = `${this.BASE_URL}api/v1/contracts/${contractAddress}/abi`;
+
         return this.fetchApi<any>(urlStr);
     }
 
@@ -218,6 +693,18 @@ class KaiascanSDK {
         return this.fetchApi<any>(urlStr);
     }
 
+    public async getBlocksByTimestamp(
+        timestamp: number
+    ): Promise<ApiResponse<any>> {
+        if (timestamp <= 0) {
+            throw new Error("Timestamp must be a positive integer");
+        }
+
+        const urlStr = `${this.BASE_URL}api/v1/blocks/timestamps/${timestamp}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
     public async getTransaction(transactionHash: string): Promise<ApiResponse<any>> {
         const urlStr = `${this.BASE_URL}${Endpoints.transactionEndpoint}/${encodeURIComponent(transactionHash)}`;
         return this.fetchApi<any>(urlStr);
@@ -232,6 +719,116 @@ class KaiascanSDK {
         transactionHash: string
     ): Promise<ApiResponse<any>> {
         const urlStr = `${this.BASE_URL}api/v1/transactions/${encodeURIComponent(transactionHash)}/status`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionInputData(
+        transactionHash: string
+    ): Promise<ApiResponse<any>> {
+        if (!transactionHash) {
+            throw new Error("Transaction hash is required");
+        }
+
+        const urlStr = `${this.BASE_URL}api/v1/transactions/${transactionHash}/input-data`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionEventLogs(
+        transactionHash: string,
+        page: number = 1,
+        size: number = 20,
+        signature?: string
+    ): Promise<ApiResponse<any>> {
+        if (!transactionHash) {
+            throw new Error("Transaction hash is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+        if (signature) queryParams.push(`signature=${signature}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/transactions/${transactionHash}/event-logs?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionInternalTransactions(
+        transactionHash: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (!transactionHash) {
+            throw new Error("Transaction hash is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/transactions/${transactionHash}/internal-transactions?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionTokenTransfers(
+        transactionHash: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (!transactionHash) {
+            throw new Error("Transaction hash is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/transactions/${transactionHash}/token-transfers?${queryParams.join('&')}`;
+
+        return this.fetchApi<any>(urlStr);
+    }
+
+    public async getTransactionNftTransfers(
+        transactionHash: string,
+        page: number = 1,
+        size: number = 20
+    ): Promise<ApiResponse<any>> {
+        if (!transactionHash) {
+            throw new Error("Transaction hash is required");
+        }
+        if (page < 1) {
+            throw new Error("Page must be >= 1");
+        }
+        if (size < 1 || size > 2000) {
+            throw new Error("Size must be between 1 and 2000");
+        }
+
+        const queryParams: string[] = [];
+        queryParams.push(`page=${page}`);
+        queryParams.push(`size=${size}`);
+
+        const urlStr = `${this.BASE_URL}api/v1/transactions/${transactionHash}/nft-transfers?${queryParams.join('&')}`;
 
         return this.fetchApi<any>(urlStr);
     }
