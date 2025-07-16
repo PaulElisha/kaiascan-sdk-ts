@@ -11,4 +11,4 @@ interface TokenInfo {
     totalBurns: number;
 }
 
-export default TokenInfo
+export { TokenInfo }

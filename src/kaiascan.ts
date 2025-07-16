@@ -1,22 +1,27 @@
 import axios from 'axios';
-import ChainInfo from './objects/chainInfo';
-import Endpoints from './objects/endpoint';
+
+import { chainConfig } from './config/Chainconfig';
+import { Endpoints } from './config/Endpoint';
+import { TokenInfo } from './interfaces/TokenInfo';
+
 import Address from './type/address';
 import ApiResponse from './interfaces/ApiResponse';
-import TokenInfo from './interfaces/TokenInfo';
-
-class KaiascanSDK {
+class KaiaScanSDK {
     public BASE_URL: string;
     public CHAIN_ID: string;
 
-    constructor(isTestnet: boolean) {
-        if (isTestnet) {
-            this.BASE_URL = ChainInfo["BASE URL TESTNET"];
-            this.CHAIN_ID = ChainInfo["CHAIN ID TESTNET"];
-        } else {
-            this.BASE_URL = ChainInfo["BASE URL MAINNET"];
-            this.CHAIN_ID = ChainInfo["CHAIN ID MAINNET"];
-        }
+    constructor(networkId: string) {
+        const { mainnet, chainIdMainnet } = chainConfig.getBaseMainnet();
+        const { testnet, chainIdTestnet } = chainConfig.getBaseTestnet();
+
+        this.BASE_URL = networkId === chainIdMainnet
+            ? mainnet || process.env.MAINNET_URL || ""
+            : testnet || process.env.TESTNET_URL || "";
+
+        this.CHAIN_ID = networkId === chainIdMainnet
+            ? chainIdMainnet || "8217"
+            : chainIdTestnet || "1001";
+
     }
 
     private async fetchApi<T>(urlStr: string): Promise<ApiResponse<T>> {
@@ -836,4 +841,4 @@ class KaiascanSDK {
 
 }
 
-export default KaiascanSDK;
+export default KaiaScanSDK;

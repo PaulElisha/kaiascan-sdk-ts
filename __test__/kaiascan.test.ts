@@ -1,4 +1,4 @@
-import KaiascanSDK from '../src/kaiascan';
+import KaiascanSDK from "../src/kaiascan"
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 

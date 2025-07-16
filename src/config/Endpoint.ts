@@ -7,4 +7,4 @@ const Endpoints = {
     transactionReceiptsEndpoint: "api/v1/transaction-receipts"
 }
 
-export default Endpoints
+export { Endpoints }
